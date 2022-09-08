@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'reviews',
+    'django_filters',
     'users',
 ]
 
@@ -58,6 +59,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'api_yamdb.wsgi.application'
 
 
+
 # Database
 
 DATABASES = {
@@ -69,6 +71,12 @@ DATABASES = {
 
 
 # Password validation
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
