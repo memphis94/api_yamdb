@@ -1,7 +1,7 @@
 from api.validators import year_validator
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from users.models import User
 
 class Categories(models.Model):
     name = models.CharField(max_length=200)
@@ -18,19 +18,6 @@ class Genres(models.Model):
     def __str__(self):
         return self.name
 
-
-class GenreTitle(models.Model):
-    Titles = models.ForeignKey(
-        Titles,
-        on_delete=models.CASCADE,
-    )
-    genre = models.ForeignKey(
-        Genres,
-        on_delete=models.CASCADE,
-    )
-
-    def __str__(self):
-        return self.name
 
 class Titles(models.Model):
     name = models.CharField(max_length=200)
@@ -55,10 +42,22 @@ class Titles(models.Model):
     def __str__(self):
         return self.name
 
+class GenreTitle(models.Model):
+    Titles = models.ForeignKey(
+        Titles,
+        on_delete=models.CASCADE,
+    )
+    genre = models.ForeignKey(
+        Genres,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return self.name
 
 class Review(models.Model):
     title_id = models.ForeignKey(
-        Title, on_delete=models.CASCADE, related_name='reviews'
+        Titles, on_delete=models.CASCADE, related_name='reviews'
     )
     text = models.TextField()    
     author = models.ForeignKey(
@@ -88,7 +87,7 @@ class Comment(models.Model):
         User, on_delete=models.CASCADE, related_name='comments'
     )
     text = models.TextField()
-    created = models.DateTimeField(
+    pub_date = models.DateTimeField(
         'Дата добавления комментария', auto_now_add=True, db_index=True
     )
 
