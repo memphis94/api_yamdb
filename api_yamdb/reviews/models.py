@@ -78,13 +78,12 @@ class Review(models.Model):
 
     def __str__(self):
         return self.text[:25]
-
+    
 
 class Comment(models.Model):
     review_id = models.ForeignKey(
         Review, on_delete=models.CASCADE, related_name='comments'
-    )
-    text = models.TextField() 
+    )    
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='comments'
     )
