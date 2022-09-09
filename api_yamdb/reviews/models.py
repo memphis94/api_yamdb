@@ -20,19 +20,6 @@ class Genres(models.Model):
         return self.name
 
 
-class GenreTitle(models.Model):
-    Titles = models.ForeignKey(
-        Titles,
-        on_delete=models.CASCADE,
-    )
-    genre = models.ForeignKey(
-        Genres,
-        on_delete=models.CASCADE,
-    )
-
-    def __str__(self):
-        return self.name
-
 class Titles(models.Model):
     name = models.CharField(max_length=200)
     genre = models.ManyToManyField(
