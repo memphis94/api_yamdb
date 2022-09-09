@@ -2,6 +2,7 @@ from api.validators import year_validator
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+from users.models import User
 
 class Categories(models.Model):
     name = models.CharField(max_length=200)
