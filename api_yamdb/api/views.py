@@ -4,6 +4,7 @@ from rest_framework import  viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from .mixins import GetCreateDeleteViewSet
 from rest_framework.filters import SearchFilter
+from django.core.exceptions import ValidationError
 
 
 from reviews.models import Categories, Genres, Review, Titles
@@ -40,6 +41,14 @@ class CategoriesViewSet(GetCreateDeleteViewSet):
     serializer_class = CategoriesSerializer
     permission_classes = (GenresTitlesPermission)
     filter_backends = (filter.SearchFilter)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+class GenresViewSet(GetCreateDeleteViewSet):
+    queryset = Genres.objects.all()
+    serializer_class = GenresSerializer
+    permission_classes = (GenresTitlesPermission)
+    filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
 
