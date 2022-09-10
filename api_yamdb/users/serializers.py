@@ -17,7 +17,8 @@ class SignUpSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email')
 
-    def validate_username(self, value):
+    @staticmethod
+    def validate_username(value):
         if value == 'me':
             raise serializers.ValidationError(
                 'Имя me недоступно'
