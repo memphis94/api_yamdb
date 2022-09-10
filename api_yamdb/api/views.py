@@ -13,6 +13,7 @@ from .permission import (GenresTitlesPermission, ReviewCommentPermission)
 from .serializers import (CategoriesSerializer, CommentSerializer, GenresSerializer,
                         ReviewSerializer,TitleSerializer, TitleCreateSerializer)
 
+
 class TitlesViewSet(viewsets.ModelViewSet):
     queryset = Titles.objects.annotate(
         rating=Avg('reviews__score')
