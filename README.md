@@ -1,2 +1,2 @@
-# api_yamdb
-api_yamdb
+# Проект api_yamdb
+Описание в стадии разработки

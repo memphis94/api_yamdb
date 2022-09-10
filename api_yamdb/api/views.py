@@ -8,7 +8,6 @@ from rest_framework.filters import SearchFilter
 from django.core.exceptions import ValidationError
 
 
-
 from reviews.models import Categories, Genres, Review, Titles
 from .permission import (GenresTitlesPermission, ReviewCommentPermission)
 from .serializers import (CategoriesSerializer, CommentSerializer, GenresSerializer,
@@ -45,6 +44,16 @@ class CategoriesViewSet(GetCreateDeleteViewSet):
     filter_backends = (SearchFilter)
     search_fields = ('name',)
     lookup_field = 'slug'
+
+
+class GenresViewSet(GetCreateDeleteViewSet):
+    queryset = Genres.objects.all()
+    serializer_class = GenresSerializer
+    permission_classes = (GenresTitlesPermission)
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
 
 class CommentViewSet(viewsets.ModelViewSet):    
     serializer_class = CommentSerializer
