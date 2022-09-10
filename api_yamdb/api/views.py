@@ -13,6 +13,7 @@ from .permission import (GenresTitlesPermission, ReviewCommentPermission)
 from .serializers import (CategoriesSerializer, CommentSerializer, GenresSerializer,
                         ReviewSerializer,TitleSerializer, TitleCreateSerializer)
 
+
 class TitlesViewSet(viewsets.ModelViewSet):
     queryset = Titles.objects.annotate(
         rating=Avg('reviews__score')
@@ -45,6 +46,7 @@ class CategoriesViewSet(GetCreateDeleteViewSet):
     search_fields = ('name',)
     lookup_field = 'slug'
 
+
 class GenresViewSet(GetCreateDeleteViewSet):
     queryset = Genres.objects.all()
     serializer_class = GenresSerializer
@@ -52,6 +54,7 @@ class GenresViewSet(GetCreateDeleteViewSet):
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
+
 
 class CommentViewSet(viewsets.ModelViewSet):    
     serializer_class = CommentSerializer
