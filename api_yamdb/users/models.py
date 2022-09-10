@@ -16,7 +16,8 @@ class User(AbstractUser):
     role = models.CharField(
         max_length=20,
         choices=ROLES,
-        default=USER)
+        default=USER
+    )
     bio = models.TextField(
         'Биография',
         blank=True,
@@ -27,14 +28,19 @@ class User(AbstractUser):
         max_length=50
     )
 
-    # @property
-    # def is_admin(self):
-    #     return self.role == self.ADMIN or self.is_superuser
-    #
-    # @property
-    # def is_moderator(self):
-    #     return self.role == self.MODERATOR
-    #
-    # @property
-    # def is_user(self):
-    #     return self.role == self.USER
+    email = models.EmailField(
+        unique=True,
+        blank=True,
+    )
+
+    @property
+    def is_admin(self):
+        return self.role == self.ADMIN or self.is_superuser
+
+    @property
+    def is_moderator(self):
+        return self.role == self.MODERATOR
+
+    @property
+    def is_user(self):
+        return self.role == self.USER

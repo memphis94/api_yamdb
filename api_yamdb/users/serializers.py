@@ -6,6 +6,13 @@ from users.models import User
 
 
 class SignUpSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True
+    )
+    username = serializers.CharField(
+        required=True
+    )
+
     class Meta:
         model = User
         fields = ('username', 'email')
@@ -19,14 +26,21 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 
 class TokenSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(
+        required=True
+    )
+    confirmation_code = serializers.CharField(
+        required=True
+    )
+
     class Meta:
         model = User
         fields = ('username', 'confirmation_code')
-        # extra_kwargs = {
-        #     'username': {
-        #         'validators': []
-        #     }
-        # }
+        extra_kwargs = {
+            'username': {
+                'validators': []
+            }
+        }
 
     def validate(self, data):
         username = data['username']
@@ -39,6 +53,11 @@ class TokenSerializer(serializers.ModelSerializer):
 class UserSerializer(SignUpSerializer):
     class Meta:
         model = User
-        fields = SignUpSerializer.Meta.fields + (
-            'first_name', 'last_name', 'bio', 'role'
+        fields = (
+            'username',
+            'email',
+            'role',
+            'bio',
+            'first_name',
+            'last_name',
         )
