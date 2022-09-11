@@ -33,7 +33,7 @@ class TitlesViewSet(viewsets.ModelViewSet):
 class GenresViewSet(GetCreateDeleteViewSet):
     queryset = Genres.objects.all()
     serializer_class = GenresSerializer
-    permission_classes = (GenresTitlesPermission)
+    permission_classes = (GenresTitlesPermission,)
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
@@ -42,7 +42,7 @@ class GenresViewSet(GetCreateDeleteViewSet):
 class CategoriesViewSet(GetCreateDeleteViewSet):
     queryset = Categories.objects.all()
     serializer_class = CategoriesSerializer
-    permission_classes = (GenresTitlesPermission)
+    permission_classes = (GenresTitlesPermission,)
     filter_backends = (SearchFilter)
     search_fields = ('name',)
     lookup_field = 'slug'
@@ -59,7 +59,7 @@ class GenresViewSet(GetCreateDeleteViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):    
     serializer_class = CommentSerializer
-    permission_classes = (ReviewCommentPermission, )
+    permission_classes = (ReviewCommentPermission,)
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
