@@ -55,6 +55,7 @@ class GenreTitle(models.Model):
     def __str__(self):
         return self.name
 
+
 class Review(models.Model):
     title_id = models.ForeignKey(
         Titles, on_delete=models.CASCADE, related_name='reviews'
@@ -71,7 +72,7 @@ class Review(models.Model):
     )
     
     class Meta:
-        ordering = ['-pub_date']
+        ordering = ['id']
         verbose_name = 'Ревью'
         verbose_name_plural = 'Ревью'
 
@@ -92,7 +93,7 @@ class Comment(models.Model):
     )
 
     class Meta:
-        ordering = ['-pub_date']
+        ordering = ['id']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 

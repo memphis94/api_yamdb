@@ -2,6 +2,7 @@ from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from rest_framework import  viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from .filters import TitlesFilter
 from .mixins import GetCreateDeleteViewSet
 from rest_framework.filters import SearchFilter
 from django.core.exceptions import ValidationError
@@ -12,6 +13,7 @@ from reviews.models import Categories, Genres, Review, Titles
 from .permission import (GenresTitlesPermission, ReviewCommentPermission)
 from .serializers import (CategoriesSerializer, CommentSerializer, GenresSerializer,
                         ReviewSerializer,TitleSerializer, TitleCreateSerializer)
+
 
 class TitlesViewSet(viewsets.ModelViewSet):
     queryset = Titles.objects.annotate(
@@ -45,6 +47,7 @@ class CategoriesViewSet(GetCreateDeleteViewSet):
     search_fields = ('name',)
     lookup_field = 'slug'
 
+
 class GenresViewSet(GetCreateDeleteViewSet):
     queryset = Genres.objects.all()
     serializer_class = GenresSerializer
@@ -52,6 +55,7 @@ class GenresViewSet(GetCreateDeleteViewSet):
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
+
 
 class CommentViewSet(viewsets.ModelViewSet):    
     serializer_class = CommentSerializer
