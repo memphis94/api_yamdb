@@ -35,7 +35,6 @@ class UserViewSet(viewsets.ModelViewSet):
     @decorators.action(
         methods=['GET', 'PATCH'],
         detail=False,
-        url_path='me',
         permission_classes=[permissions.IsAuthenticated]
     )
     def me_page(self, request):
@@ -47,10 +46,10 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(
             user,
             data=request.data,
-            partial=True
+            partial=True,
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(role=self.request.user.role)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -87,8 +86,7 @@ def signup(request):
 @decorators.api_view(['POST'])
 def get_token(request):
     serializer = TokenSerializer(data=request.data)
-    if not serializer.is_valid():
-        Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
     username = serializer.validated_data.get('username')
     user = get_object_or_404(User, username=username)
     access = AccessToken.for_user(user)
