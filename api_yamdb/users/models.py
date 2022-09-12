@@ -11,24 +11,24 @@ class User(AbstractUser):
         (MODERATOR, 'Moderator'),
         (USER, 'User'),
     )
-
     role = models.CharField(
+        'Роль',
         max_length=20,
         choices=ROLES,
-        default=USER)
+        default=USER
+    )
     bio = models.TextField(
         'Биография',
         blank=True,
     )
     confirmation_code = models.CharField(
-        verbose_name='Код подтверждения',
+        'Код подтверждения',
         blank=True,
-        max_length=50
+        max_length=6,
     )
 
     email = models.EmailField(
         unique=True,
-        blank=True,
     )
 
     @property
@@ -38,7 +38,3 @@ class User(AbstractUser):
     @property
     def is_moderator(self):
         return self.role == self.MODERATOR
-
-    @property
-    def is_user(self):
-        return self.role == self.USER
