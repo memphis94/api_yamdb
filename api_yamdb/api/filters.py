@@ -1,8 +1,8 @@
 from django_filters import rest_framework as filters
-from reviews.models import Titles
+from reviews.models import Title
 
 
-class TitlesFilter(filters.FilterSet):
+class TitleFilter(filters.FilterSet):
     """Кастомный фильтр для queryset модели Title"""
     genre = filters.CharFilter(field_name="genre__slug", lookup_expr='exact')
     category = filters.CharFilter(
@@ -12,5 +12,5 @@ class TitlesFilter(filters.FilterSet):
     name = filters.CharFilter(field_name="name", lookup_expr='contains')
 
     class Meta:
-        model = Titles
+        model = Title
         fields = ('name', 'year', 'genre', 'category')
