@@ -7,11 +7,11 @@ from users.models import User
 
 
 class SignUpSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        required=True,
-    )
     username = serializers.CharField(
-        required=True
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
     )
 
     class Meta:
@@ -28,21 +28,9 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 
 class TokenSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(
-        required=True
-    )
-    confirmation_code = serializers.CharField(
-        required=True
-    )
-
     class Meta:
         model = User
         fields = ('username', 'confirmation_code')
-        extra_kwargs = {
-            'username': {
-                'validators': []
-            }
-        }
 
     def validate(self, data):
         username = data['username']
@@ -52,23 +40,35 @@ class TokenSerializer(serializers.ModelSerializer):
         return data
 
 
-class UserSerializer(SignUpSerializer):
-    username = serializers.CharField(
-        max_length=150,
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
+class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        max_length=254,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
 
     class Meta:
         model = User
-        fields = (
-            'username',
-            'email',
-            'role',
-            'bio',
-            'first_name',
-            'last_name',
-        )
+        fields = [
+            "username", "email", "first_name", "last_name", "bio", "role",
+        ]
+        read_only_fields = ["role"]
+
+    def validate_username(self, value):
+        if value == 'me':
+            raise serializers.ValidationError('wrong name')
+        return value
+
+
+class AdminSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "bio",
+            "role"
+        ]
+
+    def create(self, validated_data):
+        return User.objects.create(**validated_data)
