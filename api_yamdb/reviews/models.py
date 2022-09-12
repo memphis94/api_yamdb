@@ -57,7 +57,7 @@ class GenreTitle(models.Model):
 
 
 class Review(models.Model):
-    title_id = models.ForeignKey(
+    title = models.ForeignKey(
         Title, on_delete=models.CASCADE, related_name='reviews'
     )
     text = models.TextField()    
@@ -71,8 +71,7 @@ class Review(models.Model):
         'Дата публикации ревью', auto_now_add=True, db_index=True
     )
     
-    class Meta:
-        ordering = ['id']
+    class Meta:        
         verbose_name = 'Ревью'
         verbose_name_plural = 'Ревью'
 
@@ -81,7 +80,7 @@ class Review(models.Model):
     
 
 class Comment(models.Model):
-    review_id = models.ForeignKey(
+    review = models.ForeignKey(
         Review, on_delete=models.CASCADE, related_name='comments'
     )    
     author = models.ForeignKey(
@@ -92,8 +91,7 @@ class Comment(models.Model):
         'Дата добавления комментария', auto_now_add=True, db_index=True
     )
 
-    class Meta:
-        ordering = ['id']
+    class Meta:        
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 

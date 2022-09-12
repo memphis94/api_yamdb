@@ -2,12 +2,12 @@ from rest_framework import permissions
 
 
 class GenreTitlePermission(permissions.IsAdminUser):
-    def has_permission(self, request, view):
-        is_admin = super().has_permission(request, view)
-        return (
-            request.method in permissions.SAFE_METHODS
-            or is_admin
-        )
+     def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.user.is_authenticated:
+            return request.user.is_admin
+        return False
 
 class ReviewCommentPermission(permissions.BasePermission):
 
