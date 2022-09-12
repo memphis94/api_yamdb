@@ -2,27 +2,26 @@ from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from rest_framework import  viewsets
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import TitlesFilter
+from .filters import TitleFilter
 from .mixins import GetCreateDeleteViewSet
 from rest_framework.filters import SearchFilter
 from django.core.exceptions import ValidationError
-from .filters import TitlesFilter
 
 
-from reviews.models import Categories, Genres, Review, Titles
-from .permission import (GenresTitlesPermission, ReviewCommentPermission)
-from .serializers import (CategoriesSerializer, CommentSerializer, GenresSerializer,
+from reviews.models import Category, Genre, Review, Title
+from .permission import (GenreTitlePermission, ReviewCommentPermission)
+from .serializers import (CategorySerializer, CommentSerializer, GenreSerializer,
                         ReviewSerializer,TitleSerializer, TitleCreateSerializer)
 
 
-class TitlesViewSet(viewsets.ModelViewSet):
-    queryset = Titles.objects.annotate(
+class TitleViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.annotate(
         rating=Avg('reviews__score')
     )
     serializer_class = TitleSerializer
-    permission_classes = (GenresTitlesPermission)
+    permission_classes = (GenreTitlePermission)
     filter_backends = (DjangoFilterBackend,)
-    filterset_class = TitlesFilter
+    filterset_class = TitleFilter
 
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PATCH']:
@@ -30,29 +29,20 @@ class TitlesViewSet(viewsets.ModelViewSet):
         return TitleSerializer
 
 
-class GenresViewSet(GetCreateDeleteViewSet):
-    queryset = Genres.objects.all()
-    serializer_class = GenresSerializer
-    permission_classes = (GenresTitlesPermission,)
+class GenreViewSet(GetCreateDeleteViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = (GenreTitlePermission,)
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
 
 
-class CategoriesViewSet(GetCreateDeleteViewSet):
-    queryset = Categories.objects.all()
-    serializer_class = CategoriesSerializer
-    permission_classes = (GenresTitlesPermission,)
+class CategoryViewSet(GetCreateDeleteViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = (GenreTitlePermission,)
     filter_backends = (SearchFilter)
-    search_fields = ('name',)
-    lookup_field = 'slug'
-
-
-class GenresViewSet(GetCreateDeleteViewSet):
-    queryset = Genres.objects.all()
-    serializer_class = GenresSerializer
-    permission_classes = (GenresTitlesPermission)
-    filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
 
@@ -78,7 +68,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
-        title = get_object_or_404(Titles, pk=title_id)
+        title = get_object_or_404(Title, pk=title_id)
         return title.reviews.all()
 
     def perform_create(self, serializer):
@@ -86,5 +76,5 @@ class ReviewViewSet(viewsets.ModelViewSet):
         if self.request.user.reviews.filter(title=title_id).exists():
             raise ValidationError("Можно добавить только один отзыв")
 
-        title = get_object_or_404(Titles, pk=title_id)
+        title = get_object_or_404(Title, pk=title_id)
         serializer.save(author=self.request.user, title=title)

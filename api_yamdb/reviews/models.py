@@ -3,7 +3,7 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import User
 
-class Categories(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
 
@@ -11,7 +11,7 @@ class Categories(models.Model):
         return self.name
 
 
-class Genres(models.Model):
+class Genre(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
 
@@ -19,14 +19,14 @@ class Genres(models.Model):
         return self.name
 
 
-class Titles(models.Model):
+class Title(models.Model):
     name = models.CharField(max_length=200)
     genre = models.ManyToManyField(
-        Genres,
+        Genre,
         related_name='titles',
     )
     category = models.ForeignKey(
-        Categories,
+        Category,
         related_name='titles',
         on_delete=models.SET_NULL,
         blank=True,
@@ -43,12 +43,12 @@ class Titles(models.Model):
         return self.name
 
 class GenreTitle(models.Model):
-    Titles = models.ForeignKey(
-        Titles,
+    Title = models.ForeignKey(
+        Title,
         on_delete=models.CASCADE,
     )
     genre = models.ForeignKey(
-        Genres,
+        Genre,
         on_delete=models.CASCADE,
     )
 
@@ -58,7 +58,7 @@ class GenreTitle(models.Model):
 
 class Review(models.Model):
     title_id = models.ForeignKey(
-        Titles, on_delete=models.CASCADE, related_name='reviews'
+        Title, on_delete=models.CASCADE, related_name='reviews'
     )
     text = models.TextField()    
     author = models.ForeignKey(
