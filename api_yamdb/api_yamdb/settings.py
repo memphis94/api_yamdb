@@ -1,5 +1,4 @@
 import os
-
 from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -60,7 +59,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'api_yamdb.wsgi.application'
 
 
-
 # Database
 
 DATABASES = {
@@ -84,7 +82,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5,
 }
 
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 AUTH_PASSWORD_VALIDATORS = [
