@@ -9,6 +9,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ('slug',)
 
 
 class Genre(models.Model):
@@ -17,6 +20,9 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ('slug',)
 
 
 class Title(models.Model):
@@ -38,9 +44,12 @@ class Title(models.Model):
         null=True,
         validators=[year_validator]
     )
+    class Meta:
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
+    
 
 class GenreTitle(models.Model):
     Title = models.ForeignKey(
@@ -52,8 +61,12 @@ class GenreTitle(models.Model):
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        ordering = ('genre',)
     def __str__(self):
-        return self.name
+        return f'{self.genre} {self.title}'
+    
+    
 
 
 class Review(models.Model):
@@ -74,7 +87,7 @@ class Review(models.Model):
     class Meta:        
         verbose_name = 'Ревью'
         verbose_name_plural = 'Ревью'
-        ordering = ('pub_date',)
+        ordering = ('-pub_date',)
         constraints = [
             models.UniqueConstraint(
                 fields=('title', 'author',),
@@ -101,6 +114,7 @@ class Comment(models.Model):
     class Meta:        
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+        ordering = ('-pub_date',)
 
     def __str__(self):
         return self.text[:15]
