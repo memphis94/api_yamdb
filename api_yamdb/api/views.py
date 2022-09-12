@@ -15,7 +15,7 @@ from .serializers import (CategorySerializer, CommentSerializer, GenreSerializer
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.annotate(
+    queryset = Title.objects.all().annotate(
         rating=Avg('reviews__score')
     )
     serializer_class = TitleSerializer
@@ -76,7 +76,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         title_id = self.kwargs.get('title_id')
-        if self.request.user.reviews.filter(title=title_id).exists():
-            raise ValidationError("Можно добавить только один отзыв") 
+        # if self.request.user.reviews.filter(title=title_id).exists():
+        #     raise ValidationError("Можно добавить только один отзыв") 
         title = get_object_or_404(Title, pk=title_id)
         serializer.save(author=self.request.user, title=title)
