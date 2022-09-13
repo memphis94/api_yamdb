@@ -1,17 +1,18 @@
 from random import randint
+
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-
-from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view, action
+from rest_framework import permissions, viewsets
+from rest_framework.decorators import action, api_view
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
-
-from api_yamdb.settings import EMAIL_FROM
 from users.models import User
 from users.permissions import IsAdmin
-from users.serializers import UserSerializer, SignUpSerializer, TokenSerializer, AdminSerializer
+from users.serializers import (AdminSerializer, SignUpSerializer,
+                               TokenSerializer, UserSerializer)
+
+from api_yamdb.settings import EMAIL_FROM
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -1,17 +1,17 @@
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-from rest_framework import  viewsets
-from django_filters.rest_framework import DjangoFilterBackend
-from .filters import TitleFilter
-from .mixins import GetCreateDeleteViewSet
-from rest_framework.filters import SearchFilter
-from django.core.exceptions import ValidationError
 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 
 from reviews.models import Category, Genre, Review, Title
-from .permission import (GenreTitlePermission, ReviewCommentPermission)
-from .serializers import (CategorySerializer, CommentSerializer, GenreSerializer,
-                        ReviewSerializer,TitleSerializer, TitleCreateSerializer)
+from .filters import TitleFilter
+from .mixins import GetCreateDeleteViewSet
+from .permission import GenreTitlePermission, ReviewCommentPermission
+from .serializers import (CategorySerializer, CommentSerializer,
+                          GenreSerializer, ReviewSerializer,
+                          TitleCreateSerializer, TitleSerializer)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -47,7 +47,7 @@ class CategoryViewSet(GetCreateDeleteViewSet):
     lookup_field = 'slug'
 
 
-class CommentViewSet(viewsets.ModelViewSet):    
+class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (ReviewCommentPermission,)
 
@@ -64,7 +64,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, review=review)
 
 
-class ReviewViewSet(viewsets.ModelViewSet):    
+class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = (ReviewCommentPermission,)
 
@@ -76,7 +76,5 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         title_id = self.kwargs.get('title_id')
-        if self.request.user.reviews.filter(title=title_id).exists():
-            raise ValidationError("Можно добавить только один отзыв") 
         title = get_object_or_404(Title, pk=title_id)
         serializer.save(author=self.request.user, title=title)

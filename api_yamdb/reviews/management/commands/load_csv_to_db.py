@@ -2,8 +2,7 @@ import csv
 
 from django.conf import settings
 from django.core.management import BaseCommand
-
-from reviews.models import Category, Comment, Genre, Review, Title, GenreTitle
+from reviews.models import Category, Comment, Genre, GenreTitle, Review, Title
 from users.models import User
 
 TABLES = {
@@ -18,7 +17,6 @@ TABLES = {
 
 
 class Command(BaseCommand):
-
     def handle(self, *args, **kwargs):
         for model, csv_f in TABLES.items():
             with open(
