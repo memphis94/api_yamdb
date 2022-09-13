@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
+
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
 from users.models import User
 
 
@@ -15,6 +17,12 @@ class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email')
+        validators = [
+            serializers.UniqueTogetherValidator(
+                queryset=User.objects.all(),
+                fields=('username', 'email')
+            )
+        ]
 
     @staticmethod
     def validate_username(value):
@@ -46,9 +54,14 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "username", "email", "first_name", "last_name", "bio", "role",
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'bio',
+            'role'
         ]
-        read_only_fields = ["role"]
+        read_only_fields = ['role']
 
     def validate_username(self, value):
         if value == 'me':
@@ -60,12 +73,12 @@ class AdminSerializer(UserSerializer):
     class Meta:
         model = User
         fields = [
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-            "bio",
-            "role"
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'bio',
+            'role'
         ]
 
     def create(self, validated_data):
