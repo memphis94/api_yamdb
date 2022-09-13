@@ -41,9 +41,9 @@ class Title(models.Model):
         Category,
         related_name='titles',
         verbose_name='Категория',
-        on_delete=models.PROTECT,
-        
+        on_delete=models.PROTECT
     )
+
     description = models.TextField('Описание')
     year = models.PositiveSmallIntegerField(
         db_index=True,
@@ -67,13 +67,13 @@ class GenreTitle(models.Model):
         on_delete=models.CASCADE,
         related_name='genres',
         verbose_name='произведение'
-        )
+    )
     genre = models.ForeignKey(
         Genre,
         on_delete=models.CASCADE,
         related_name='titles',
         verbose_name='жанр'
-        )
+    )
 
     class Meta:
         verbose_name = 'жанр произведения'
